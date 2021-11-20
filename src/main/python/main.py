@@ -4,7 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 import sys
-
+from fbs_runtime.application_context.PyQt5 import ApplicationContext
 import issue_report
 import list_entry_widget
 import suggestion_window
@@ -80,10 +80,20 @@ class LandingPage(QMainWindow):
         scroll_area.setWidget(container)
 
 
-# Starts the program
 if __name__ == '__main__':
+    appctxt = ApplicationContext()       # 1. Instantiate ApplicationContext
     app = QApplication(sys.argv)
     app.setStyle('Fusion')
     landing_page = LandingPage()
     landing_page.show()
-    sys.exit(app.exec_())
+    exit_code = appctxt.app.exec()       # 2. Invoke appctxt.app.exec()
+    sys.exit(exit_code)
+
+
+# Starts the program
+#if __name__ == '__main__':
+#    app = QApplication(sys.argv)
+#    app.setStyle('Fusion')
+#    landing_page = LandingPage()
+#    landing_page.show()
+#    sys.exit(app.exec_())
