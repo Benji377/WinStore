@@ -50,7 +50,6 @@ class Database:
         except pymysql.Error as err:
             print(err)
 
-        self.disconnect()
         return app_list
 
     # Gets only one app by its id
@@ -62,7 +61,6 @@ class Database:
             results = self.cursor.fetchone()
         except pymysql.Error as err:
             print(err)
-        self.disconnect()
         return results
 
     def insert_suggestion(self, username, appname, applink):
@@ -74,4 +72,14 @@ class Database:
         except pymysql.Error as err:
             print(err)
 
-        self.disconnect()
+    def search_app(self, search_term):
+        sql = "SELECT * FROM app_list WHERE name like %s"
+        val = ("%" + search_term + "%")
+        results = None
+        try:
+            self.cursor.execute(sql, val)
+            results = self.cursor.fetchone()
+        except pymysql.Error as err:
+            print("SearchError: "+str(err))
+
+        return results

@@ -8,7 +8,7 @@ from fbs_runtime.application_context.PyQt5 import ApplicationContext
 import issue_report
 import list_entry_widget
 import suggestion_window
-from src.main.python import error_message
+import error_message
 
 
 # Opens a new window when the user wants to submit a suggestion
@@ -25,7 +25,7 @@ def report_click():
 
 # Is the main window of the program
 class LandingPage(QMainWindow):
-    databse = database_controller.Database()
+    database = database_controller.Database()
 
     def __init__(self, parent=None):
         super(LandingPage, self).__init__(parent)
@@ -52,31 +52,24 @@ class LandingPage(QMainWindow):
         title_label.setGeometry(20, 30, 90, 30)
         title_label.setFont(QFont('SansSerif', 15))
 
-        search_bar = QLineEdit(self)
-        search_bar.setGeometry(110, 30, 800, 30)
-        search_button = QPushButton(self)
-        search_button.setGeometry(910, 29, 50, 32)
-        search_button.setIcon(QIcon('./images/search_icon.png'))
+        self.search_bar = QLineEdit(self)
+        self.search_bar.setGeometry(110, 30, 800, 30)
+        self.search_button = QPushButton(self)
+        self.search_button.setGeometry(910, 29, 50, 32)
+        self.search_button.setIcon(QIcon('./images/search_icon.png'))
+        self.search_button.clicked.connect(lambda: self.searching(self.search_bar.text()))
 
-        vbox = QVBoxLayout()
+        self.vbox = QVBoxLayout()
         container = QWidget()
 
-        if not self.databse.connect():
+        if not self.database.connect():
             errorbox = error_message.ErrorMessage()
             errorbox.seterror("Couldn't connect to the internet", "Connection failed")
+            errorbox.exec_()
+            sys.exit()
 
-        # Gets the list of apps from the database
-        app_list = self.databse.get_all_apps()
-
-        # Lists all apps of the database
-        for i in app_list:
-            widget = list_entry_widget.ListItem()
-            widget.set_id(str(i[0]))
-            widget.set_name(i[1])
-            widget.set_description(i[3])
-            vbox.addWidget(widget)
-
-        container.setLayout(vbox)
+        self.list_all()
+        container.setLayout(self.vbox)
 
         scroll_area = QScrollArea(self)
         scroll_area.setGeometry(20, 70, 960, 520)
@@ -84,12 +77,42 @@ class LandingPage(QMainWindow):
         scroll_area.setWidgetResizable(False)
         scroll_area.setWidget(container)
 
+    def list_all(self):
+        # Gets the list of apps from the database
+        app_list = self.database.get_all_apps()
+
+        # Lists all apps of the database
+        for i in app_list:
+            widget = list_entry_widget.ListItem()
+            widget.set_id(str(i[0]))
+            widget.set_name(i[1])
+            widget.set_description(i[3])
+            self.vbox.addWidget(widget, alignment=Qt.AlignmentFlag.AlignTop)
+
+    def searching(self, term):
+        appl = self.database.search_app(term)
+
+        for i in reversed(range(self.vbox.count())):
+            self.vbox.itemAt(i).widget().setParent(None)
+
+        if not appl:
+            self.list_all()
+        else:
+            widget = list_entry_widget.ListItem()
+            widget.set_id(str(appl[0]))
+            widget.set_name(appl[1])
+            widget.set_description(appl[3])
+            self.vbox.addWidget(widget, alignment=Qt.AlignmentFlag.AlignTop)
+
+        print("Searched: "+term)
+
 
 if __name__ == '__main__':
-    appctxt = ApplicationContext()       # 1. Instantiate ApplicationContext
+    appctxt = ApplicationContext()  # 1. Instantiate ApplicationContext
     app = QApplication(sys.argv)
     app.setStyle('Fusion')
     landing_page = LandingPage()
     landing_page.show()
-    exit_code = appctxt.app.exec()       # 2. Invoke appctxt.app.exec()
+    exit_code = appctxt.app.exec()  # 2. Invoke appctxt.app.exec()
+    landing_page.database.disconnect()
     sys.exit(exit_code)
