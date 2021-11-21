@@ -8,6 +8,7 @@ from fbs_runtime.application_context.PyQt5 import ApplicationContext
 import issue_report
 import list_entry_widget
 import suggestion_window
+from src.main.python import error_message
 
 
 # Opens a new window when the user wants to submit a suggestion
@@ -60,6 +61,10 @@ class LandingPage(QMainWindow):
         vbox = QVBoxLayout()
         container = QWidget()
 
+        if not self.databse.connect():
+            errorbox = error_message.ErrorMessage()
+            errorbox.seterror("Couldn't connect to the internet", "Connection failed")
+
         # Gets the list of apps from the database
         app_list = self.databse.get_all_apps()
 
@@ -88,12 +93,3 @@ if __name__ == '__main__':
     landing_page.show()
     exit_code = appctxt.app.exec()       # 2. Invoke appctxt.app.exec()
     sys.exit(exit_code)
-
-
-# Starts the program
-#if __name__ == '__main__':
-#    app = QApplication(sys.argv)
-#    app.setStyle('Fusion')
-#    landing_page = LandingPage()
-#    landing_page.show()
-#    sys.exit(app.exec_())
