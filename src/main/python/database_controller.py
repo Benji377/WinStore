@@ -42,7 +42,7 @@ class Database:
 
         try:
             self.cursor.execute(sql)
-            results = self.cursor.fetchall()
+            results = self.cursor.fetchmany(15)
             i = 0
             for row in results:
                 app_list.insert(i, row)
@@ -80,6 +80,20 @@ class Database:
             self.cursor.execute(sql, val)
             results = self.cursor.fetchone()
         except pymysql.Error as err:
-            print("SearchError: "+str(err))
+            print(err)
 
         return results
+
+    def url_validator(self, appurl):
+        sql = "SELECT * FROM app_list WHERE link like %s"
+        val = ("%"+appurl+"%")
+
+        try:
+            self.cursor.execute(sql, val)
+            if self.cursor.fetchall():
+                return False
+            else:
+                return True
+        except pymysql.Error as err:
+            print(err)
+
