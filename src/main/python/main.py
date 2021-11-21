@@ -31,7 +31,7 @@ class LandingPage(QMainWindow):
         super(LandingPage, self).__init__(parent)
         self.setWindowTitle("WinStore")
         self.setFixedSize(1000, 600)
-        self.setWindowIcon(QIcon('./images/icon.png'))
+        self.setWindowIcon(QIcon('D:/Coding/PyProjects/Winstore/src/main/icons/icon.png'))
 
         github_action = QAction("Github", self)
         github_action.triggered.connect(lambda: webbrowser.open("https://github.com/Benji377"))
@@ -56,8 +56,9 @@ class LandingPage(QMainWindow):
         self.search_bar.setGeometry(110, 30, 800, 30)
         self.search_button = QPushButton(self)
         self.search_button.setGeometry(910, 29, 50, 32)
-        self.search_button.setIcon(QIcon('./images/search_icon.png'))
+        self.search_button.setIcon(QIcon('D:/Coding/PyProjects/Winstore/src/main/icons/search_icon.png'))
         self.search_button.clicked.connect(lambda: self.searching(self.search_bar.text()))
+        self.search_button.setAutoDefault(True)
 
         self.vbox = QVBoxLayout()
         container = QWidget()
@@ -97,6 +98,10 @@ class LandingPage(QMainWindow):
 
         if not appl:
             self.list_all()
+            errorbox = error_message.ErrorMessage()
+            errorbox.seterror("Nothing found in our database, \n"
+                              "maybe make a suggestion to let us know", "Nothing found")
+            errorbox.exec_()
         else:
             widget = list_entry_widget.ListItem()
             widget.set_id(str(appl[0]))
@@ -104,7 +109,7 @@ class LandingPage(QMainWindow):
             widget.set_description(appl[3])
             self.vbox.addWidget(widget, alignment=Qt.AlignmentFlag.AlignTop)
 
-        print("Searched: "+term)
+        print("Searched: " + term)
 
 
 if __name__ == '__main__':

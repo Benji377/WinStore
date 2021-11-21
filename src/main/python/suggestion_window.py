@@ -56,9 +56,16 @@ class SuggestionWindow(QDialog):
                 errormsg.exec_()
             elif validators.url(applink):
                 data = database_controller.Database()
-                print("Success! %s, %s, %s" % (username, appname, applink))
-                data.insert_suggestion(username, appname, applink)
-                self.close()
+                data.connect()
+                if data.url_validator(applink):
+                    data.insert_suggestion(username, appname, applink)
+                    self.close()
+                else:
+                    errormsg.seterror("Link already in our database.\n"
+                                      "Try searching it by its name or report an issue if you can't find it",
+                                      "Existing URL")
+                    errormsg.exec_()
+                    self.close()
             else:
                 errormsg.seterror("Provided link is invalid", "Invalid URL")
                 errormsg.exec_()
