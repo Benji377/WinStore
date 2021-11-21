@@ -30,7 +30,7 @@ class LandingPage(QMainWindow):
         super(LandingPage, self).__init__(parent)
         self.setWindowTitle("WinStore")
         self.setFixedSize(1000, 600)
-        self.setWindowIcon(QIcon('D:/Coding/PyProjects/Winstore/src/main/icons/icon.png'))
+        self.setWindowIcon(QIcon('./images/icon.png'))
 
         github_action = QAction("Github", self)
         github_action.triggered.connect(lambda: webbrowser.open("https://github.com/Benji377/WinStore"))
@@ -55,7 +55,7 @@ class LandingPage(QMainWindow):
         self.search_bar.setGeometry(110, 30, 800, 30)
         self.search_button = QPushButton(self)
         self.search_button.setGeometry(910, 29, 50, 32)
-        self.search_button.setIcon(QIcon('D:/Coding/PyProjects/Winstore/src/main/icons/search_icon.png'))
+        self.search_button.setIcon(QIcon('./images/search_icon.png'))
         self.search_button.clicked.connect(lambda: self.searching(self.search_bar.text()))
         self.search_button.setAutoDefault(True)
 

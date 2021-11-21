@@ -6,7 +6,7 @@ import requests
 
 # Controls the database and provides functions to retrieve data
 class Database:
-    load_dotenv()
+    load_dotenv(verbose=True)
     cursor = None
     database = None
 
