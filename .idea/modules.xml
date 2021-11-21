@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Winstore.iml" filepath="$PROJECT_DIR$/.idea/Winstore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Winstore-TEST.iml" filepath="$PROJECT_DIR$/.idea/Winstore-TEST.iml" />
     </modules>
   </component>
 </project>
