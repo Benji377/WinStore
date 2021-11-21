@@ -17,7 +17,7 @@ class ExpandedItem(QDialog):
         self.setFixedSize(500, 700)
         self.setWindowTitle("Example")
         self.setModal(True)
-        self.setWindowIcon(QIcon('./images/icon.png'))
+        self.setWindowIcon(self.style().standardIcon(getattr(QStyle, 'SP_DialogOpenButton')))
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
 
         self.banner_label = QLabel(self)
@@ -43,7 +43,7 @@ class ExpandedItem(QDialog):
         deta_label.setFont(QFont('SansSerif', 12))
 
         self.details_label = QLabel(self)
-        self.details_label.setGeometry(20, 430, 460, 30)
+        self.details_label.setGeometry(20, 430, 460, 200)
         self.details_label.setWordWrap(True)
         self.details_label.setAlignment(Qt.AlignTop)
         self.details_label.setFont(QFont('SansSerif', 10))
@@ -55,6 +55,7 @@ class ExpandedItem(QDialog):
 
     def get_results(self, app_id):
         data = database_controller.Database()
+        data.connect()
         appl = data.get_app_by_id(app_id)
 
         write_file(appl[2], 'temp.jpg')
@@ -67,3 +68,4 @@ class ExpandedItem(QDialog):
         self.description_label.setText(appl[3])
         self.details_label.setText(appl[6])
         self.credits_label.setText(appl[5])
+        self.setWindowTitle(appl[1])
