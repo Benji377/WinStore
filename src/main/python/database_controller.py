@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 import pymysql
+import requests
 
 
 # Controls the database and provides functions to retrieve data
@@ -9,14 +10,22 @@ class Database:
     cursor = None
     database = None
 
-    def __init__(self):
-        # Initialize database
-        data = pymysql.connect(host=os.environ['HOST'],
-                               user=os.environ['USER'],
-                               passwd=os.environ['PASSWD'],
-                               db=os.environ['DATAB'])
-        self.cursor = data.cursor()
-        self.database = data
+    def connect(self):
+        # Check internet connection
+        try:
+            requests.head("http://www.google.com/", timeout=1)
+            print('The internet connection is active')
+            # Initialize database
+            data = pymysql.connect(host=os.environ['HOST'],
+                                   user=os.environ['USER'],
+                                   passwd=os.environ['PASSWD'],
+                                   db=os.environ['DATAB'])
+            self.cursor = data.cursor()
+            self.database = data
+            return True
+        except requests.ConnectionError:
+            print("The internet connection is down")
+            return False
 
     # Disconnect the databse
     def disconnect(self):
