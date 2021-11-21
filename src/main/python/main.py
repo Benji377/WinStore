@@ -34,7 +34,7 @@ class LandingPage(QMainWindow):
         self.setWindowIcon(QIcon('D:/Coding/PyProjects/Winstore/src/main/icons/icon.png'))
 
         github_action = QAction("Github", self)
-        github_action.triggered.connect(lambda: webbrowser.open("https://github.com/Benji377"))
+        github_action.triggered.connect(lambda: webbrowser.open("https://github.com/Benji377/WinStore"))
 
         suggest_action = QAction("Suggest an app", self)
         suggest_action.triggered.connect(lambda: suggest_click())

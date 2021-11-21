@@ -14,7 +14,7 @@ class SuggestionWindow(QDialog):
         self.setFixedSize(500, 220)
         self.setWindowTitle("Suggestions")
         self.setModal(True)
-        self.setWindowIcon(QIcon('./images/icon.png'))
+        self.setWindowIcon(self.style().standardIcon(getattr(QStyle, 'SP_MessageBoxInformation')))
         self.setWindowFlag(Qt.WindowContextHelpButtonHint, False)
 
         username_label = QLabel("Your name:", self)
